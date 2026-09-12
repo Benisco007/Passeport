@@ -493,8 +493,10 @@
     <div class="link-box" id="linkBox" style="display:none">
       <p class="lbl">Fiche créée avec succès ! Choisissez une action :</p>
       <div class="link-row" style="flex-wrap:wrap;gap:10px;">
-        <input type="text" id="generatedLink" readonly/>
+        <input type="text" id="generatedLink" readonly style="width:100%;margin-bottom:6px;"/>
         <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
+        <button class="btn-wa" onclick="shareGeneratedWhatsApp()">🟢 Partager WhatsApp</button>
+        <button class="btn-share" onclick="shareGeneratedGeneric()">📲 Partager Mobile</button>
         <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
       </div>
       <p class="copy-ok" id="copyOk">✅ Lien copié dans le presse-papier !</p>
@@ -543,6 +545,44 @@
         ok.style.display = 'block';
         setTimeout(() => ok.style.display = 'none', 2500);
       });
+    };
+
+    window.shareGeneratedWhatsApp = function() {
+      const link = document.getElementById('generatedLink').value;
+      const fullname = document.getElementById('fullname')?.value?.trim() || '';
+      const ref = document.getElementById('ref')?.value?.trim() || '';
+      
+      let msg = `*Fiche BIO DATA* 📄\n`;
+      if (fullname) msg += `Nom: ${fullname}\n`;
+      if (ref) msg += `Réf: ${ref}\n`;
+      msg += `Consulter la fiche complète ici :\n${link}`;
+      
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    };
+
+    window.shareGeneratedGeneric = async function() {
+      const link = document.getElementById('generatedLink').value;
+      const fullname = document.getElementById('fullname')?.value?.trim() || 'Candidat';
+      const ref = document.getElementById('ref')?.value?.trim() || '';
+      const title = `Fiche BIO DATA - ${fullname}`;
+      const text = `Fiche BIO DATA de ${fullname}${ref ? ' (Réf: ' + ref + ')' : ''}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: title,
+            text: text,
+            url: link
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            console.error('Erreur partage:', err);
+          }
+        }
+      } else {
+        copyLink();
+      }
     };
 
     // ── Collecte des données ──

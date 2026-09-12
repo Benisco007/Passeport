@@ -27,16 +27,20 @@
       background: #008751;
       color: #fff;
       border: none;
-      padding: 12px 28px;
+      padding: 12px 22px;
       border-radius: 50px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(0,135,81,.30);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
-    .btn-dl:hover { opacity: .9; }
-    .btn-back {
-      background: #1a1a2e;
+    .btn-dl:hover { opacity: .92; transform: translateY(-1px); }
+    .btn-wa {
+      background: #25D366;
       color: #fff;
       border: none;
       padding: 12px 22px;
@@ -44,8 +48,43 @@
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37,211,102,.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       text-decoration: none;
-      display: inline-block;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-wa:hover { opacity: .92; transform: translateY(-1px); }
+    .btn-share {
+      background: #007AFF;
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,122,255,.30);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-share:hover { opacity: .92; transform: translateY(-1px); }
+    .btn-back {
+      background: #1a1a2e;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* ── FICHE PRINCIPALE ── */
@@ -547,6 +586,8 @@
     <div class="actions">
       <a class="btn-back" href="index.html">← Nouvelle fiche</a>
       <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
+      <button class="btn-wa" onclick="shareWhatsApp()">🟢 Partager sur WhatsApp</button>
+      <button class="btn-share" onclick="shareGeneric()">📲 Partager (Mobile)</button>
     </div>
 
     <div class="fiche" id="fichePrint">
@@ -737,6 +778,8 @@
 
     <div class="actions" style="margin-top:14px;">
       <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
+      <button class="btn-wa" onclick="shareWhatsApp()">🟢 Partager sur WhatsApp</button>
+      <button class="btn-share" onclick="shareGeneric()">📲 Partager (Mobile)</button>
     </div>
 
   </div>
@@ -841,6 +884,49 @@
 
     window.downloadPDF = function() {
       window.print();
+    };
+
+    window.shareWhatsApp = function() {
+      const fullname = document.getElementById('v_fullname')?.textContent || '';
+      const ref = document.getElementById('v_ref')?.textContent || '';
+      const url = window.location.href;
+      
+      let msg = `*Fiche BIO DATA* 📄\n`;
+      if (fullname && fullname !== '—') msg += `Nom: ${fullname}\n`;
+      if (ref && ref !== '—') msg += `Réf: ${ref}\n`;
+      msg += `Consulter la fiche complète ici :\n${url}`;
+      
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    };
+
+    window.shareGeneric = async function() {
+      const fullname = document.getElementById('v_fullname')?.textContent || 'Candidat';
+      const ref = document.getElementById('v_ref')?.textContent || '';
+      const url = window.location.href;
+      const title = `Fiche BIO DATA - ${fullname}`;
+      const text = `Fiche BIO DATA de ${fullname}${ref && ref !== '—' ? ' (Réf: ' + ref + ')' : ''}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: title,
+            text: text,
+            url: url
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            console.error('Erreur partage:', err);
+          }
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          alert('✅ Lien de la fiche copié dans le presse-papier ! Vous pouvez le coller sur WhatsApp ou Telegram.');
+        } catch(e) {
+          prompt('Copiez ce lien pour le partager :', url);
+        }
+      }
     };
 
     load();
