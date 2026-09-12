@@ -324,6 +324,12 @@ select:focus {
   box-sizing: border-box;
 }
 
+@media (max-width: 600px) {
+  .link-row input {
+    display: none !important;
+  }
+}
+
 .link-actions {
   display: flex;
   gap: 10px;
