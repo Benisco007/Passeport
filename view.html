@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BIO DATA</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -585,9 +586,8 @@
 
     <div class="actions">
       <a class="btn-back" href="index.html">← Nouvelle fiche</a>
-      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
-      <button class="btn-wa" onclick="shareWhatsApp()">🟢 Partager sur WhatsApp</button>
-      <button class="btn-share" onclick="shareGeneric()">📲 Partager (Mobile)</button>
+      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger / Imprimer PDF</button>
+      <button class="btn-share" onclick="sharePDF(event)">📲 Partager la fiche (PDF)</button>
     </div>
 
     <div class="fiche" id="fichePrint">
@@ -777,9 +777,8 @@
     </div><!-- /fiche -->
 
     <div class="actions" style="margin-top:14px;">
-      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
-      <button class="btn-wa" onclick="shareWhatsApp()">🟢 Partager sur WhatsApp</button>
-      <button class="btn-share" onclick="shareGeneric()">📲 Partager (Mobile)</button>
+      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger / Imprimer PDF</button>
+      <button class="btn-share" onclick="sharePDF(event)">📲 Partager la fiche (PDF)</button>
     </div>
 
   </div>
@@ -886,45 +885,81 @@
       window.print();
     };
 
-    window.shareWhatsApp = function() {
-      const fullname = document.getElementById('v_fullname')?.textContent || '';
-      const ref = document.getElementById('v_ref')?.textContent || '';
-      const url = window.location.href;
-      
-      let msg = `*Fiche BIO DATA* 📄\n`;
-      if (fullname && fullname !== '—') msg += `Nom: ${fullname}\n`;
-      if (ref && ref !== '—') msg += `Réf: ${ref}\n`;
-      msg += `Consulter la fiche complète ici :\n${url}`;
-      
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-      window.open(waUrl, '_blank');
-    };
+    async function generatePdfBlob() {
+      const source = document.getElementById('fichePrint');
+      if (!source) throw new Error('Fiche introuvable');
 
-    window.shareGeneric = async function() {
-      const fullname = document.getElementById('v_fullname')?.textContent || 'Candidat';
-      const ref = document.getElementById('v_ref')?.textContent || '';
-      const url = window.location.href;
-      const title = `Fiche BIO DATA - ${fullname}`;
-      const text = `Fiche BIO DATA de ${fullname}${ref && ref !== '—' ? ' (Réf: ' + ref + ')' : ''}`;
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:760px;background:#ffffff;padding:0;margin:0;z-index:-9999;';
 
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: title,
-            text: text,
-            url: url
-          });
-        } catch (err) {
-          if (err.name !== 'AbortError') {
-            console.error('Erreur partage:', err);
-          }
+      const clone = source.cloneNode(true);
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
+
+      const fullname = document.getElementById('v_fullname')?.textContent?.trim() || 'Candidat';
+      const cleanName = fullname !== '—' ? fullname.replace(/[^\w\s-]/gi, '').replace(/\s+/g, '_') : 'BIODATA';
+      const filename = `${cleanName}.pdf`;
+
+      const opt = {
+        margin:       [4, 4, 4, 4],
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, width: 760, windowWidth: 760, scrollX: 0, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      try {
+        const pdfBlob = await html2pdf().set(opt).from(clone).output('blob');
+        return { pdfBlob, filename };
+      } finally {
+        if (document.body.contains(wrapper)) {
+          document.body.removeChild(wrapper);
         }
-      } else {
-        try {
-          await navigator.clipboard.writeText(url);
-          alert('✅ Lien de la fiche copié dans le presse-papier ! Vous pouvez le coller sur WhatsApp ou Telegram.');
-        } catch(e) {
-          prompt('Copiez ce lien pour le partager :', url);
+      }
+    }
+
+    window.sharePDF = async function(evt) {
+      const btn = evt?.currentTarget || document.activeElement;
+      const oldText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Génération du PDF…';
+      }
+
+      try {
+        const { pdfBlob, filename } = await generatePdfBlob();
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          if (btn) btn.innerHTML = '📲 Ouverture du partage…';
+          await navigator.share({
+            files: [pdfFile],
+            title: 'Fiche BIO DATA',
+            text: 'Voici la fiche BIO DATA en PDF.'
+          });
+        } else if (navigator.share) {
+          await navigator.share({
+            title: 'Fiche BIO DATA',
+            url: window.location.href
+          });
+        } else {
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+          alert('Le fichier PDF a été téléchargé. Vous pouvez maintenant l\'envoyer directement sur WhatsApp ou n\'importe quelle application.');
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Erreur partage:', err);
+          alert('Erreur lors du partage du PDF : ' + (err.message || err));
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = oldText;
         }
       }
     };
