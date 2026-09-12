@@ -492,12 +492,10 @@
     <!-- LIEN GÉNÉRÉ ET ACTION APERÇU PDF -->
     <div class="link-box" id="linkBox" style="display:none">
       <p class="lbl">Fiche créée avec succès ! Choisissez une action :</p>
-      <div class="link-row">
-        <input type="text" id="generatedLink" readonly/>
-        <div class="link-actions">
-          <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
-          <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
-        </div>
+      <input type="hidden" id="generatedLink"/>
+      <div class="link-actions">
+        <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
+        <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
       </div>
       <p class="copy-ok" id="copyOk">✅ Lien copié dans le presse-papier !</p>
     </div>
