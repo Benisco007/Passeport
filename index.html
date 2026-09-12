@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIO DATA — Formulaire</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+      background: #f1f5f9;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 135, 81, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(252, 209, 22, 0.08) 0px, transparent 50%);
+      min-height: 100vh;
+      padding: 24px 14px 70px;
+      color: #0f172a;
+    }
+
+    .app-bar {
+      max-width: 740px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #008751 0%, #005f38 100%);
+      border-radius: 14px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(0, 135, 81, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .app-bar .flag { 
+      font-size: 42px; 
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+    .app-bar h1 { 
+      color: #ffffff; 
+      font-size: 24px; 
+      letter-spacing: 3px; 
+      font-weight: 900; 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .app-bar p  { 
+      color: rgba(255, 255, 255, 0.85); 
+      font-size: 13px; 
+      margin-top: 2px; 
+      font-weight: 500;
+    }
+
+    .form-wrap {
+      max-width: 740px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .card-title {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid #008751;
+    }
+    .card-title .ar { 
+      font-size: 14px; 
+      text-transform: none; 
+      letter-spacing: 0; 
+      color: #94a3b8; 
+      font-weight: 600;
+    }
+
+    .card-body { padding: 22px 20px; }
+
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    @media(max-width:560px){
+      .g2,.g3 { grid-template-columns: 1fr; }
+    }
+
+    .f { display: flex; flex-direction: column; gap: 6px; }
+
+    label {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    label .ar { 
+      font-size: 11.5px; 
+      text-transform: none; 
+      letter-spacing: 0; 
+      color: #94a3b8; 
+      direction: rtl;
+      font-weight: 600;
+    }
+
+    input[type=text], input[type=number], input[type=date], select {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      color: #0f172a;
+      background: #f8fafc;
+      width: 100%;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #008751;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 135, 81, 0.14);
+    }
+    .input-name {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 16px;
+      border-color: #94a3b8;
+    }
+
+    .lang-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .lang-table th, .lang-table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .lang-table th { 
+      background: #f1f5f9; 
+      font-weight: 800; 
+      color: #475569; 
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .lang-table td:first-child { text-align: left; font-weight: 700; color: #1e293b; }
+    .lang-table input[type=radio] { 
+      accent-color: #008751; 
+      width: 18px; 
+      height: 18px; 
+      cursor: pointer; 
+      transform: scale(1.1);
+    }
+
+    .exp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+    .exp-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    @media(max-width:560px){ .exp-row { grid-template-columns: 1fr; } }
+
+    .btn-add {
+      border: 2px dashed #008751;
+      background: rgba(0, 135, 81, 0.04);
+      color: #008751;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-add:hover { 
+      background: #008751; 
+      color: #ffffff; 
+      box-shadow: 0 4px 12px rgba(0, 135, 81, 0.2);
+    }
+
+    .btn-remove {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      font-weight: 800;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+    .btn-remove:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+    .photo-zone {
+      width: 170px; height: 210px;
+      border: 2.5px dashed #cbd5e1;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+      margin: 0 auto;
+    }
+    .photo-zone:hover { 
+      border-color: #008751; 
+      background: rgba(0, 135, 81, 0.02);
+      transform: translateY(-2px);
+    }
+    .photo-zone img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-zone .ph { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #64748b; }
+    .photo-zone .ph span { font-size: 36px; }
+    .photo-zone .ph p { font-size: 11.5px; text-align: center; padding: 0 12px; font-weight: 600; }
+
+    .btn-generate {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #008751 0%, #005f38 100%);
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,135,81,.35);
+      transition: all 0.2s ease;
+    }
+    .btn-generate:hover:not(:disabled) { 
+      opacity: 0.95; 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 25px rgba(0,135,81,.45);
+    }
+    .btn-generate:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .link-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      border-left: 5px solid #FCD116;
+    }
+    .link-box .lbl { font-size: 11.5px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 10px; }
+    .link-row { display: flex; gap: 10px; }
+    .link-row input { 
+      flex: 1; 
+      font-size: 13.5px; 
+      color: #334155; 
+      background: #f1f5f9; 
+      border: 1.5px solid #cbd5e1; 
+      border-radius: 8px; 
+      padding: 10px 14px; 
+      font-weight: 600;
+    }
+    .btn-copy { 
+      background: #0f172a; 
+      color: #ffffff; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      font-size: 13px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      white-space: nowrap; 
+      transition: background 0.2s ease;
+    }
+    .btn-copy:hover { background: #1e293b; }
+
+    .btn-view { 
+      background: linear-gradient(135deg, #008751 0%, #005f38 100%);
+      color: #ffffff !important; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      font-size: 13px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap; 
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 135, 81, 0.3);
+    }
+    .btn-view:hover { 
+      background: #005f38; 
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 135, 81, 0.4);
+    }
+    .copy-ok { font-size: 13px; color: #008751; font-weight: 700; margin-top: 8px; display: none; }
+
+    .err-msg { font-size: 13px; color: #dc2626; font-weight: 700; margin-top: 10px; display: none; text-align: center; }
+
+    /* Spinner dans le bouton */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin-icon {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-bar">
+    <span class="flag">🇧🇯</span>
+    <div>
+      <h1>BIO DATA</h1>
+      <p>Application for Employment &nbsp;—&nbsp; طلب توظيف</p>
+    </div>
+  </div>
+
+  <div class="form-wrap">
+
+    <!-- CONTRAT -->
+    <div class="card">
+      <div class="card-title">Contract Info <span class="ar">معلومات العقد</span></div>
+      <div class="card-body g3">
+        <div class="f">
+          <label>REF.</label>
+          <input type="text" id="ref" placeholder="Ex: FRANC"/>
+        </div>
+        <div class="f">
+          <label>Month Salary <span class="ar">الراتب الشهري</span></label>
+          <input type="text" id="salary" placeholder="Ex: 110"/>
+        </div>
+        <div class="f">
+          <label>Post Applied For <span class="ar">الوظيفة</span></label>
+          <input type="text" id="post" placeholder="Ex: Domestic Helpers"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOM -->
+    <div class="card">
+      <div class="card-title">Full Name <span class="ar">الاسم الكامل</span></div>
+      <div class="card-body">
+        <div class="f">
+          <input type="text" id="fullname" class="input-name" placeholder="EX: DORCAS MAJORELLE MAHOUNAN"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFOS PERSO -->
+    <div class="card">
+      <div class="card-title">Details of Application <span class="ar">تفاصيل الطلب</span></div>
+      <div class="card-body g2">
+        <div class="f"><label>Nationality <span class="ar">الجنسية</span></label><input type="text" id="nationality" placeholder="Ex: BENIN"/></div>
+        <div class="f"><label>Religion <span class="ar">الديانة</span></label><input type="text" id="religion" placeholder="Ex: MUSLIM"/></div>
+        <div class="f"><label>Date of Birth <span class="ar">تاريخ الميلاد</span></label><input type="date" id="dob"/></div>
+        <div class="f"><label>Age <span class="ar">العمر</span></label><input type="number" id="age" placeholder="Ex: 25" min="0"/></div>
+        <div class="f"><label>Place of Birth <span class="ar">مكان الميلاد</span></label><input type="text" id="pob" placeholder="Ex: COTONOU"/></div>
+        <div class="f">
+          <label>Marital Status <span class="ar">الحالة الاجتماعية</span></label>
+          <select id="marital">
+            <option value="">-- Choisir --</option>
+            <option value="SINGLE">Single / أعزب</option>
+            <option value="MRD">Married / متزوج</option>
+            <option value="DIVORCED">Divorced / مطلق</option>
+            <option value="WIDOWED">Widowed / أرمل</option>
+          </select>
+        </div>
+        <div class="f"><label>No. of Children <span class="ar">عدد الأطفال</span></label><input type="number" id="children" placeholder="Ex: 1" min="0"/></div>
+        <div class="f"><label>Weight <span class="ar">الوزن</span></label><input type="text" id="weight" placeholder="Ex: 68 KG"/></div>
+        <div class="f"><label>Height <span class="ar">الطول</span></label><input type="text" id="height" placeholder="Ex: 5'4"/></div>
+        <div class="f"><label>Education <span class="ar">التعليم</span></label><input type="text" id="education" placeholder="Ex: HIGH SCHOOL"/></div>
+      </div>
+    </div>
+
+    <!-- PASSEPORT -->
+    <div class="card">
+      <div class="card-title">Passport Details <span class="ar">تفاصيل جواز السفر</span></div>
+      <div class="card-body g2">
+        <div class="f"><label>Number <span class="ar">الرقم</span></label><input type="text" id="ppNumber" placeholder="Ex: 23PP90667"/></div>
+        <div class="f"><label>Date of Issue <span class="ar">تاريخ الإصدار</span></label><input type="date" id="ppIssue"/></div>
+        <div class="f"><label>Place of Issue <span class="ar">مكان الإصدار</span></label><input type="text" id="ppPlace" placeholder="Ex: BEN"/></div>
+        <div class="f"><label>Date of Expiry <span class="ar">تاريخ الانتهاء</span></label><input type="date" id="ppExpiry"/></div>
+      </div>
+    </div>
+
+    <!-- LANGUES -->
+    <div class="card">
+      <div class="card-title">Knowledge of Languages <span class="ar">إجادة اللغات</span></div>
+      <div class="card-body">
+        <table class="lang-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>English</th>
+              <th>Arabic <span class="ar">عربي</span></th>
+              <th>French <span class="ar">فرنسي</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fluent <span class="ar" style="font-size:10px;color:#999;display:block">ممتاز</span></td>
+              <td><input type="radio" name="lang_en" value="FLUENT"/></td>
+              <td><input type="radio" name="lang_ar" value="FLUENT"/></td>
+              <td><input type="radio" name="lang_fr" value="FLUENT"/></td>
+            </tr>
+            <tr>
+              <td>Fair <span class="ar" style="font-size:10px;color:#999;display:block">وسط</span></td>
+              <td><input type="radio" name="lang_en" value="FAIR"/></td>
+              <td><input type="radio" name="lang_ar" value="FAIR"/></td>
+              <td><input type="radio" name="lang_fr" value="FAIR"/></td>
+            </tr>
+            <tr>
+              <td>Poor <span class="ar" style="font-size:10px;color:#999;display:block">ضعيف</span></td>
+              <td><input type="radio" name="lang_en" value="POOR"/></td>
+              <td><input type="radio" name="lang_ar" value="POOR"/></td>
+              <td><input type="radio" name="lang_fr" value="POOR"/></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EXPÉRIENCES -->
+    <div class="card">
+      <div class="card-title">Work Experience <span class="ar">خبرة العمل</span></div>
+      <div class="card-body">
+        <div id="expList">
+          <div class="exp-row">
+            <div class="f"><label>Country <span class="ar">البلد</span></label><input type="text" name="exp_country" placeholder="Ex: MASAR"/></div>
+            <div class="f"><label>Period <span class="ar">المدة</span></label><input type="text" name="exp_period" placeholder="Ex: 2 YEARS"/></div>
+            <div class="f"><label>Work <span class="ar">العمل</span></label><input type="text" name="exp_work" placeholder="Ex: Domestic Helper"/></div>
+            <div></div>
+          </div>
+        </div>
+        <button type="button" class="btn-add" onclick="addExp()">+ Ajouter une expérience</button>
+      </div>
+    </div>
+
+    <!-- PHOTO -->
+    <div class="card">
+      <div class="card-title">Photo du candidat</div>
+      <div class="card-body">
+        <div class="photo-zone" onclick="document.getElementById('photoInput').click()">
+          <img id="photoPreview" style="display:none"/>
+          <div class="ph" id="phPlaceholder">
+            <span>📷</span>
+            <p>Cliquer pour uploader la photo</p>
+          </div>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="previewPhoto(event)"/>
+      </div>
+    </div>
+
+    <!-- BOUTON -->
+    <button class="btn-generate" id="btnGenerate" onclick="generateLink()">
+      🔗 Générer le lien de partage
+    </button>
+
+    <p class="err-msg" id="errMsg"></p>
+
+    <!-- LIEN GÉNÉRÉ ET ACTION APERÇU PDF -->
+    <div class="link-box" id="linkBox" style="display:none">
+      <p class="lbl">Fiche créée avec succès ! Choisissez une action :</p>
+      <div class="link-row" style="flex-wrap:wrap;gap:10px;">
+        <input type="text" id="generatedLink" readonly/>
+        <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
+        <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
+      </div>
+      <p class="copy-ok" id="copyOk">✅ Lien copié dans le presse-papier !</p>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL = 'https://xndozhcbhjegtfxrovvi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuZG96aGNiaGplZ3RmeHJvdnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTI4MzcsImV4cCI6MjEwNDc4ODgzN30.DxJOS8Rox0zdeBET7xTxuPgzSYg8psP1068nOpSYv1M';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ── Helpers ──
+    window.addExp = function() {
+      const div = document.createElement('div');
+      div.className = 'exp-row';
+      div.innerHTML = `
+        <div class="f"><label>Country <span class="ar">البلد</span></label><input type="text" name="exp_country" placeholder="Ex: KUWAIT"/></div>
+        <div class="f"><label>Period <span class="ar">المدة</span></label><input type="text" name="exp_period" placeholder="Ex: 1 YEAR"/></div>
+        <div class="f"><label>Work <span class="ar">العمل</span></label><input type="text" name="exp_work" placeholder="Ex: Cleaning"/></div>
+        <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      document.getElementById('expList').appendChild(div);
+    };
+
+    window.previewPhoto = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = document.getElementById('photoPreview');
+        img.src = ev.target.result;
+        img.style.display = 'block';
+        document.getElementById('phPlaceholder').style.display = 'none';
+        window._photoFile = file;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.copyLink = function() {
+      const val = document.getElementById('generatedLink').value;
+      navigator.clipboard.writeText(val).then(() => {
+        const ok = document.getElementById('copyOk');
+        ok.style.display = 'block';
+        setTimeout(() => ok.style.display = 'none', 2500);
+      });
+    };
+
+    // ── Collecte des données ──
+    function collectData() {
+      const get = id => document.getElementById(id)?.value?.trim() || '';
+      const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+
+      const countries = [...document.querySelectorAll('[name="exp_country"]')].map(i => i.value.trim());
+      const periods   = [...document.querySelectorAll('[name="exp_period"]')].map(i => i.value.trim());
+      const works     = [...document.querySelectorAll('[name="exp_work"]')].map(i => i.value.trim());
+      const experiences = countries
+        .map((c, i) => ({ country: c, period: periods[i], work: works[i] }))
+        .filter(e => e.country || e.period || e.work);
+
+      return {
+        ref: get('ref'), salary: get('salary'), post: get('post'),
+        fullname: get('fullname'),
+        nationality: get('nationality'), religion: get('religion'),
+        dob: get('dob'), age: get('age'), pob: get('pob'),
+        marital: get('marital'), children: get('children'),
+        weight: get('weight'), height: get('height'), education: get('education'),
+        ppNumber: get('ppNumber'), ppIssue: get('ppIssue'),
+        ppPlace: get('ppPlace'), ppExpiry: get('ppExpiry'),
+        lang_en: radio('lang_en'), lang_ar: radio('lang_ar'), lang_fr: radio('lang_fr'),
+        experiences
+      };
+    }
+
+    // ── Génération du lien ──
+    window.generateLink = async function() {
+      const btn = document.getElementById('btnGenerate');
+      const errMsg = document.getElementById('errMsg');
+      errMsg.style.display = 'none';
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spin-icon"></span> Enregistrement en cours…';
+
+      try {
+        const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const data = collectData();
+
+        // 1. Upload photo si présente
+        if (window._photoFile) {
+          const ext = window._photoFile.name.split('.').pop();
+          const path = `${id}.${ext}`;
+          const { error: uploadErr } = await supabase.storage
+            .from('photos')
+            .upload(path, window._photoFile, { contentType: window._photoFile.type });
+
+          if (uploadErr) throw new Error('Erreur upload photo : ' + uploadErr.message);
+
+          const { data: urlData } = supabase.storage.from('photos').getPublicUrl(path);
+          data.photoURL = urlData.publicUrl;
+        }
+
+        // 2. Enregistrer dans la table fiches
+        const { error: dbErr } = await supabase
+          .from('fiches')
+          .insert({ id, data });
+
+        if (dbErr) throw new Error('Erreur base de données : ' + dbErr.message);
+
+        // 3. Construire et afficher le lien et bouton d'ouverture
+        const base = window.location.href.replace('index.html', '').replace(/\/$/, '');
+        const link = `${base}/view.html?id=${id}`;
+
+        document.getElementById('generatedLink').value = link;
+        const viewBtn = document.getElementById('btnOpenView');
+        if (viewBtn) viewBtn.href = link;
+        document.getElementById('linkBox').style.display = 'block';
+        document.getElementById('linkBox').scrollIntoView({ behavior: 'smooth' });
+
+      } catch (err) {
+        console.error(err);
+        errMsg.textContent = '❌ ' + (err.message || 'Erreur inconnue. Vérifiez votre connexion.');
+        errMsg.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔗 Générer le lien de partage';
+      }
+    };
+  </script>
+
+</body>
+</html>

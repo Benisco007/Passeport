@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIO DATA</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #e8eaf0;
+      padding: 20px 12px 60px;
+      color: #000000;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .actions {
+      max-width: 760px;
+      margin: 0 auto 14px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-dl {
+      background: #008751;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,135,81,.30);
+    }
+    .btn-dl:hover { opacity: .9; }
+    .btn-back {
+      background: #1a1a2e;
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ── FICHE PRINCIPALE ── */
+    .fiche {
+      width: 760px;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 2px solid #000000;
+      font-size: 10.5px;
+      color: #000000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* EN-TÊTE AGENCE (3 COLONNES) */
+    .agency-header {
+      display: grid;
+      grid-template-columns: 1fr 120px 1.1fr;
+      align-items: center;
+      padding: 8px 12px 6px;
+      border-bottom: 2px solid #000000;
+      gap: 10px;
+    }
+    .agency-left {
+      text-align: left;
+    }
+    .agency-name {
+      font-size: 15px;
+      font-weight: 900;
+      color: #a82424; /* Reddish burgundy */
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    .agency-ar-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #a82424;
+      direction: rtl;
+      margin-top: 1px;
+    }
+    .agency-sub {
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #a82424;
+      letter-spacing: 0.8px;
+      margin-top: 2px;
+    }
+
+    .agency-center {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .logo-benin-svg {
+      width: 65px;
+      height: 65px;
+    }
+
+    .agency-right {
+      text-align: right;
+      font-size: 8px;
+      font-weight: 800;
+      color: #8f7300; /* Golden mustard yellow */
+      line-height: 1.3;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    /* BIO DATA TITLE BLOCK */
+    .title-block {
+      text-align: center;
+      padding: 5px 10px 5px;
+      border-bottom: 2px solid #000000;
+    }
+    .main-title {
+      font-size: 30px;
+      font-weight: 900;
+      font-family: 'Arial Black', Impact, sans-serif;
+      letter-spacing: 3px;
+      color: #000000;
+      line-height: 1;
+    }
+    .sub-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #000000;
+      margin-top: 3px;
+    }
+
+    /* CONTRAT GRID */
+    .contrat-grid {
+      display: grid;
+      grid-template-columns: 110px 1fr 150px 1fr;
+      border-bottom: 1px solid #000000;
+    }
+    .contrat-grid > div {
+      padding: 3px 6px;
+      border-right: 1px solid #000000;
+    }
+    .contrat-grid > div:last-child { border-right: none; }
+    .contrat-grid .lbl {
+      font-weight: 800;
+      color: #a82424;
+      text-transform: uppercase;
+      font-size: 8.5px;
+    }
+    .contrat-grid .val {
+      font-weight: 900;
+      color: #000000 !important;
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .contrat-post {
+      display: grid;
+      grid-template-columns: 110px 1fr 150px 1fr;
+      border-bottom: 1px solid #000000;
+    }
+    .contrat-post > div {
+      padding: 3px 6px;
+      border-right: 1px solid #000000;
+    }
+    .contrat-post > div:last-child { border-right: none; }
+    .contrat-post .lbl {
+      font-weight: 800;
+      color: #a82424;
+      text-transform: uppercase;
+      font-size: 8.5px;
+    }
+    .contrat-post .val {
+      font-weight: 900;
+      color: #000000 !important;
+      font-size: 12px;
+    }
+
+    /* NOM ROW */
+    .name-row {
+      display: grid;
+      grid-template-columns: 75px 1fr 100px;
+      border-bottom: 2px solid #000000;
+      align-items: center;
+    }
+    .name-lbl {
+      font-weight: 900;
+      font-size: 15px;
+      padding: 5px 8px;
+      border-right: 1px solid #000000;
+      color: #000000;
+    }
+    .name-val {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      padding: 5px 8px;
+      text-transform: uppercase;
+      color: #000000 !important;
+    }
+    .name-ar {
+      font-size: 11px;
+      padding: 5px 8px;
+      border-left: 1px solid #000000;
+      direction: rtl;
+      color: #000000;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    /* CORPS DU DOCUMENT (2 COLONNES FORCEES) */
+    .body-cols {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+    }
+
+    .col-left {
+      border-right: 1px solid #000000;
+    }
+
+    /* HEADERS DE SECTION */
+    .sec-head {
+      background: #ffffff;
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      color: #a82424; /* Reddish title */
+      border-bottom: 1px solid #000000;
+      border-top: 1px solid #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sec-head:first-child { border-top: none; }
+    .sec-head .ar {
+      font-size: 10px;
+      text-transform: none;
+      direction: rtl;
+      color: #000000;
+      font-weight: 800;
+    }
+
+    /* TABLEAU INFOS PERSO */
+    .info-tbl {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .info-tbl tr {
+      border-bottom: 1px solid #000000;
+    }
+    .info-tbl tr:last-child {
+      border-bottom: none;
+    }
+    .info-tbl td {
+      padding: 3px 6px;
+      vertical-align: middle;
+    }
+    .info-tbl .lbl {
+      width: 44%;
+      font-weight: 800;
+      font-size: 9px;
+      text-transform: uppercase;
+      color: #a82424; /* Reddish label */
+      border-right: 1px solid #000000;
+    }
+    .info-tbl .val {
+      font-weight: 900;
+      font-size: 11.5px;
+      color: #000000 !important; /* Pitch black */
+      width: 38%;
+      text-transform: uppercase;
+    }
+    .info-tbl .ar-col {
+      width: 18%;
+      direction: rtl;
+      font-size: 9.5px;
+      color: #000000;
+      font-weight: 800;
+      text-align: right;
+      border-left: 1px solid #000000;
+    }
+
+    /* LANGUES TABLEAU */
+    .lang-tbl {
+      width: calc(100% - 10px);
+      margin: 4px 5px;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+    .lang-tbl th, .lang-tbl td {
+      border: 1px solid #000000;
+      padding: 3px 5px;
+      text-align: center;
+    }
+    .lang-tbl th {
+      color: #a82424;
+      font-weight: 800;
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+    .lang-tbl td:first-child {
+      text-align: left;
+      font-weight: 800;
+      color: #a82424;
+    }
+    .lang-mark {
+      color: #000000;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    /* EXPÉRIENCE TABLEAU */
+    .exp-tbl {
+      width: calc(100% - 10px);
+      margin: 4px 5px;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+    .exp-tbl th {
+      border: 1px solid #000000;
+      padding: 3px 5px;
+      font-weight: 800;
+      font-size: 9px;
+      color: #a82424;
+      text-transform: uppercase;
+    }
+    .exp-tbl td {
+      border: 1px solid #000000;
+      padding: 4px 5px;
+      font-weight: 900;
+      color: #000000 !important;
+      text-transform: uppercase;
+    }
+
+    /* COLONNE DROITE */
+    .col-right {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* PASSPORT BLOCK (TOP RIGHT) */
+    .pp-block {
+      width: 100%;
+      border-bottom: 1px solid #000000;
+    }
+    .pp-head {
+      background: #fff;
+      color: #a82424;
+      font-weight: 900;
+      font-size: 9.5px;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      border-bottom: 1px solid #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pp-tbl {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .pp-tbl tr {
+      border-bottom: 1px solid #000000;
+    }
+    .pp-tbl tr:last-child { border-bottom: none; }
+    .pp-tbl td {
+      padding: 3px 6px;
+      font-size: 9px;
+    }
+    .pp-tbl .k {
+      color: #a82424;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 8.5px;
+      width: 45%;
+    }
+    .pp-tbl .v {
+      font-weight: 900;
+      color: #000000 !important;
+      font-size: 10.5px;
+    }
+    .pp-tbl .ar {
+      direction: rtl;
+      font-size: 9px;
+      color: #000000;
+      font-weight: 800;
+      text-align: right;
+      width: 20%;
+    }
+
+    /* CANDIDATE PHOTO (UNDER PASSPORT ON THE RIGHT) */
+    .photo-wrapper {
+      padding: 6px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    .photo-wrapper img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border: 1px solid #000000;
+    }
+    .photo-wrapper .no-photo {
+      width: 100%;
+      height: 180px;
+      background: #fafafa;
+      border: 1.5px dashed #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+    }
+
+    /* FOOTER */
+    .fiche-footer {
+      border-top: 1px solid #000000;
+      padding: 4px 8px;
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #000000;
+      display: flex;
+      justify-content: space-between;
+      background: #fff;
+    }
+
+    /* PRINT SPECIFICS — native window.print() approach */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 6mm 6mm 6mm 6mm;
+      }
+
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+
+      .actions { display: none !important; }
+
+      .fiche {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        font-size: 10px !important;
+      }
+
+      .body-cols {
+        display: grid !important;
+        grid-template-columns: 1fr 200px !important;
+      }
+
+      .col-left {
+        border-right: 1px solid #000000 !important;
+        border-bottom: none !important;
+      }
+
+      .col-right {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .agency-header {
+        display: grid !important;
+        grid-template-columns: 1fr 110px 1.1fr !important;
+      }
+
+      /* Force all values to solid black for print */
+      .val, .name-val, .pp-tbl .v, .info-tbl .val, .exp-tbl td {
+        color: #000000 !important;
+        font-weight: 900 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .lbl, .sec-head, .pp-head, .pp-tbl .k, .info-tbl .lbl, .lang-tbl th, .exp-tbl th {
+        color: #a82424 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    /* États chargement */
+    #loadState, #errState {
+      max-width: 760px;
+      margin: 60px auto;
+      text-align: center;
+      padding: 40px 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.10);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 4px solid #e0e0e0;
+      border-top-color: #008751;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loadState">
+    <div class="spinner"></div>
+    <p style="color:#555;font-weight:600;">Chargement de la fiche…</p>
+  </div>
+
+  <div id="errState" style="display:none;">
+    <p style="font-size:36px;">⚠️</p>
+    <p style="color:#c00;font-weight:700;margin-top:10px;" id="errText">Fiche introuvable</p>
+    <p style="color:#666;font-size:13px;margin-top:6px;">Le lien est peut-être incorrect ou expiré.</p>
+  </div>
+
+  <div id="mainState" style="display:none;">
+
+    <div class="actions">
+      <a class="btn-back" href="index.html">← Nouvelle fiche</a>
+      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
+    </div>
+
+    <div class="fiche" id="fichePrint">
+
+      <!-- EN-TÊTE AGENCE -->
+      <div class="agency-header">
+        <div class="agency-left">
+          <div class="agency-name">FUAD AL FAHAD</div>
+          <div class="agency-ar-title">العمالة المنزلية</div>
+          <div class="agency-sub">MAN POWER RECRUITMENT</div>
+        </div>
+        <div class="agency-center">
+          <svg class="logo-benin-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="56" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+            <g clip-path="url(#circleClip)">
+              <rect x="0" y="0" width="48" height="120" fill="#008751"/>
+              <rect x="48" y="0" width="72" height="60" fill="#FCD116"/>
+              <rect x="48" y="60" width="72" height="60" fill="#E8112D"/>
+            </g>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#000000" stroke-width="2"/>
+            <defs>
+              <clipPath id="circleClip">
+                <circle cx="60" cy="60" r="54"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <div class="agency-right">
+          <div>HAWALLY-TUNIS ST-NASER</div>
+          <div>AL RUMAIH COMPLEX</div>
+          <div>BASEMENT-OFFICE NO.08</div>
+          <div>KUWAIT</div>
+          <div>EMAIL: fnfmanpower@gmail.com</div>
+        </div>
+      </div>
+
+      <!-- BIO DATA TITLE -->
+      <div class="title-block">
+        <div class="main-title">BIO DATA</div>
+        <div class="sub-title">APPLICATION FOR EMPLOYMENT</div>
+      </div>
+
+      <!-- CONTRAT LINE 1 -->
+      <div class="contrat-grid">
+        <div>
+          <div class="lbl">REF.</div>
+          <div class="val" id="v_ref">—</div>
+        </div>
+        <div>
+          <div class="lbl" style="display:flex;justify-content:space-between;">FRANC <span style="direction:rtl;font-size:9px;color:#000;">الراتب الشهري</span></div>
+        </div>
+        <div>
+          <div class="lbl" style="display:flex;justify-content:space-between;">MONTH SALARY <span style="direction:rtl;font-size:9px;color:#000;">الراتب الشهري</span></div>
+          <div class="val" id="v_salary">—</div>
+        </div>
+        <div></div>
+      </div>
+
+      <!-- CONTRAT LINE 2 -->
+      <div class="contrat-post">
+        <div>
+          <div class="lbl">POST APPLIED FOR</div>
+        </div>
+        <div>
+          <div class="val" id="v_post">—</div>
+        </div>
+        <div>
+          <div class="lbl" style="direction:rtl;text-align:right;">الوظيفة</div>
+        </div>
+        <div></div>
+      </div>
+
+      <!-- NOM -->
+      <div class="name-row">
+        <div class="name-lbl">Name</div>
+        <div class="name-val" id="v_fullname">—</div>
+        <div class="name-ar">الاسم الكامل</div>
+      </div>
+
+      <!-- CORPS EN 2 COLONNES -->
+      <div class="body-cols">
+
+        <!-- GAUCHE -->
+        <div class="col-left">
+
+          <!-- DETAILS OF APPLICATION -->
+          <div class="sec-head">
+            DETAILS OF APPLICATION
+            <span class="ar">تفاصيل الطلب</span>
+          </div>
+          <table class="info-tbl">
+            <tr><td class="lbl">NATIONALITY</td><td class="val" id="v_nationality">—</td><td class="ar-col">الجنسية</td></tr>
+            <tr><td class="lbl">RELIGION</td><td class="val" id="v_religion">—</td><td class="ar-col">الديانة</td></tr>
+            <tr><td class="lbl">DATE OF BIRTH</td><td class="val" id="v_dob">—</td><td class="ar-col">تاريخ الميلاد</td></tr>
+            <tr><td class="lbl">AGE</td><td class="val" id="v_age">—</td><td class="ar-col">العمر</td></tr>
+            <tr><td class="lbl">PLACE OF BIRTH</td><td class="val" id="v_pob">—</td><td class="ar-col">مكان الميلاد</td></tr>
+            <tr><td class="lbl">MARITAL STATUS</td><td class="val" id="v_marital">—</td><td class="ar-col">الحالة الاجتماعية</td></tr>
+            <tr><td class="lbl">NO. OF CHILDREN</td><td class="val" id="v_children">—</td><td class="ar-col">عدد الأطفال</td></tr>
+            <tr><td class="lbl">WEIGHT</td><td class="val" id="v_weight">—</td><td class="ar-col">الوزن</td></tr>
+            <tr><td class="lbl">HEIGHT</td><td class="val" id="v_height">—</td><td class="ar-col">الطول</td></tr>
+            <tr><td class="lbl">EDUCATION</td><td class="val" id="v_education">—</td><td class="ar-col">التعليم</td></tr>
+          </table>
+
+          <!-- KNOWLEDGE OF LANGUAGES -->
+          <div class="sec-head">
+            KNOWLEDGE OF LANGUAGES
+            <span class="ar">إجادة اللغات</span>
+          </div>
+          <table class="lang-tbl">
+            <thead>
+              <tr>
+                <th></th>
+                <th>ENGLISH</th>
+                <th>ARABIC <span style="direction:rtl;display:inline-block;font-size:9px;">عربي</span></th>
+                <th>FRENCH <span style="direction:rtl;display:inline-block;font-size:9px;">فرنسي</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FLUENT <span style="direction:rtl;font-size:9px;color:#000;display:block">ممتاز</span></td>
+                <td id="le_f"></td><td id="la_f"></td><td id="lf_f"></td>
+              </tr>
+              <tr>
+                <td>FAIR <span style="direction:rtl;font-size:9px;color:#000;display:block">وسط</span></td>
+                <td id="le_m"></td><td id="la_m"></td><td id="lf_m"></td>
+              </tr>
+              <tr>
+                <td>POOR <span style="direction:rtl;font-size:9px;color:#000;display:block">ضعيف</span></td>
+                <td id="le_p"></td><td id="la_p"></td><td id="lf_p"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- WORK EXPERIENCE -->
+          <div class="sec-head">
+            WORK EXPERIENCE
+            <span class="ar">خبرة العمل</span>
+          </div>
+          <table class="exp-tbl">
+            <thead>
+              <tr>
+                <th>COUNTRY <span style="direction:rtl;display:inline-block;font-size:9px;">البلد</span></th>
+                <th>PERIOD <span style="direction:rtl;display:inline-block;font-size:9px;">المدة</span></th>
+                <th>WORK <span style="direction:rtl;display:inline-block;font-size:9px;">العمل</span></th>
+              </tr>
+            </thead>
+            <tbody id="v_exp">
+              <tr><td colspan="3" style="text-align:center;color:#666;padding:6px">—</td></tr>
+            </tbody>
+          </table>
+
+        </div><!-- /col-left -->
+
+        <!-- DROITE -->
+        <div class="col-right">
+
+          <!-- PASSPORT DETAILS (TOP RIGHT) -->
+          <div class="pp-block">
+            <div class="pp-head">
+              PASSPORT DETAILS
+              <span class="ar">تفاصيل جواز السفر</span>
+            </div>
+            <table class="pp-tbl">
+              <tr><td class="k">NUMBER</td><td class="v" id="v_ppNumber">—</td><td class="ar">الرقم</td></tr>
+              <tr><td class="k">DATE OF ISSUE</td><td class="v" id="v_ppIssue">—</td><td class="ar">تاريخ الإصدار</td></tr>
+              <tr><td class="k">PLACE OF ISSUE</td><td class="v" id="v_ppPlace">—</td><td class="ar">مكان الإصدار</td></tr>
+              <tr><td class="k">DATE OF EXP</td><td class="v" id="v_ppExpiry">—</td><td class="ar">تاريخ الانتهاء</td></tr>
+            </table>
+          </div>
+
+          <!-- PHOTO DU CANDIDAT (EN-DESSOUS DU PASSPORT) -->
+          <div class="photo-wrapper">
+            <img id="v_photo" src="" alt="Photo" style="display:none"/>
+            <div id="v_nophoto" class="no-photo">📷<br/>Photo</div>
+          </div>
+
+        </div><!-- /col-right -->
+
+      </div><!-- /body-cols -->
+
+      <!-- FOOTER -->
+      <div class="fiche-footer">
+        <div>MASAR &nbsp;&nbsp;&nbsp;&nbsp; 2 YEARS</div>
+        <div>PRINTED <span id="v_date"></span></div>
+      </div>
+
+    </div><!-- /fiche -->
+
+    <div class="actions" style="margin-top:14px;">
+      <button class="btn-dl" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL = 'https://xndozhcbhjegtfxrovvi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuZG96aGNiaGplZ3RmeHJvdnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTI4MzcsImV4cCI6MjEwNDc4ODgzN30.DxJOS8Rox0zdeBET7xTxuPgzSYg8psP1068nOpSYv1M';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function fill(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val || '—';
+    }
+
+    function fmtDate(str) {
+      if (!str) return '—';
+      const p = str.split('-');
+      return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : str;
+    }
+
+    function markLang(col, level) {
+      const levelMap = { FLUENT: 'f', FAIR: 'm', POOR: 'p' };
+      const colMap   = { lang_en: 'le', lang_ar: 'la', lang_fr: 'lf' };
+      if (!level || !colMap[col]) return;
+      const el = document.getElementById(`${colMap[col]}_${levelMap[level]}`);
+      if (el) el.innerHTML = '<span class="lang-mark">/</span>';
+    }
+
+    async function load() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) { showErr('ID manquant dans le lien.'); return; }
+
+      try {
+        const { data, error } = await supabase
+          .from('fiches')
+          .select('data')
+          .eq('id', id)
+          .single();
+
+        if (error || !data) { showErr('Fiche introuvable.'); return; }
+
+        const d = data.data;
+
+        fill('v_ref',         d.ref);
+        fill('v_salary',      d.salary);
+        fill('v_post',        d.post);
+        fill('v_fullname',    d.fullname);
+        fill('v_nationality', d.nationality);
+        fill('v_religion',    d.religion);
+        fill('v_dob',         fmtDate(d.dob));
+        fill('v_age',         d.age);
+        fill('v_pob',         d.pob);
+        fill('v_marital',     d.marital);
+        fill('v_children',    d.children);
+        fill('v_weight',      d.weight);
+        fill('v_height',      d.height);
+        fill('v_education',   d.education);
+        fill('v_ppNumber',    d.ppNumber);
+        fill('v_ppIssue',     fmtDate(d.ppIssue));
+        fill('v_ppPlace',     d.ppPlace);
+        fill('v_ppExpiry',    fmtDate(d.ppExpiry));
+
+        markLang('lang_en', d.lang_en);
+        markLang('lang_ar', d.lang_ar);
+        markLang('lang_fr', d.lang_fr);
+
+        if (d.experiences && d.experiences.length) {
+          document.getElementById('v_exp').innerHTML = d.experiences.map(e => `
+            <tr>
+              <td>${e.country || '—'}</td>
+              <td>${e.period  || '—'}</td>
+              <td>${e.work    || '—'}</td>
+            </tr>`).join('');
+        }
+
+        if (d.photoURL) {
+          const img = document.getElementById('v_photo');
+          img.src = d.photoURL;
+          img.style.display = 'block';
+          document.getElementById('v_nophoto').style.display = 'none';
+        }
+
+        const now = new Date();
+        document.getElementById('v_date').textContent =
+          `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+
+        document.getElementById('loadState').style.display = 'none';
+        document.getElementById('mainState').style.display = 'block';
+
+      } catch(err) {
+        showErr('Erreur réseau : ' + err.message);
+      }
+    }
+
+    function showErr(msg) {
+      document.getElementById('loadState').style.display = 'none';
+      document.getElementById('errState').style.display  = 'block';
+      document.getElementById('errText').textContent = msg || 'Fiche introuvable';
+    }
+
+    window.downloadPDF = function() {
+      window.print();
+    };
+
+    load();
+  </script>
+
+</body>
+</html>
