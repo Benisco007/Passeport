@@ -494,8 +494,10 @@
       <p class="lbl">Fiche créée avec succès ! Choisissez une action :</p>
       <div class="link-row">
         <input type="text" id="generatedLink" readonly/>
-        <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
-        <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
+        <div class="link-actions">
+          <button class="btn-copy" onclick="copyLink()">📋 Copier le lien</button>
+          <a id="btnOpenView" class="btn-view" href="#" target="_blank">👁️ Voir la fiche / PDF</a>
+        </div>
       </div>
       <p class="copy-ok" id="copyOk">✅ Lien copié dans le presse-papier !</p>
     </div>
